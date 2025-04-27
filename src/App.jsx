@@ -172,13 +172,13 @@ export function App() {
           <div className="main-column">
             <img src="/logo.png" alt="" className="logo" />
             <h2 className="underTitle">10 лет опыта работы на рынке</h2>
+          </div>
             <h2 className="title">
               <strong>
                 Элитная недвижимость в Дубае от 250000$ от агенства Prime Dubai
                 Estates
               </strong>
             </h2>
-          </div>
 
           <div className="button-start" onClick={() => setIsOpenQuiz(true)}>
             Начать подбор
@@ -277,7 +277,6 @@ export function App() {
             <button onClick={handleNext} className="next-button">
               Далее
             </button>
-            <span className="enter-hint">или нажмите Enter</span>
           </div>
         </div>
       </div>

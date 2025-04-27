@@ -4,10 +4,10 @@
     border-radius: 50%;
   }
   .main-page-content {
-    gap: 60px !important;
+    gap: 40px !important;
   }
   .title {
-    font-size: 20px!important;
+    font-size: 24px!important;
   }
 
   .quiz-title {
