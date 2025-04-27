@@ -1,9 +1,13 @@
 @media only screen and (max-width: 540px) {
+  .logo{
+    width: 100px!important;
+    border-radius: 50%;
+  }
   .main-page-content {
     gap: 60px !important;
   }
   .title {
-    font-size: 20px;
+    font-size: 20px!important;
   }
 
   .quiz-title {
@@ -12,11 +16,11 @@
 }
 
 @media only screen and (max-width: 410px) {
+  .main-page-content {
+    gap: 30px !important;
+  }
   .quiz-title {
     font-size: 18px!important;
-  }
-  .title {
-    font-size: 16px!important;
   }
   .button-start {
     font-size: 14px!important;

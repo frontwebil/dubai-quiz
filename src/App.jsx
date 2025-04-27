@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast, Toaster } from "react-hot-toast";
 
 export function App() {
   const [isOpenQuiz, setIsOpenQuiz] = useState(false);
@@ -121,7 +122,7 @@ export function App() {
       `*Имя:* ${name}%0a` +
       `*Номер Телефона:* ${phone}%0a` +
       `${quizResponses}` + // Додаємо вибрані відповіді з квізу
-      `%0a`
+      `%0a`;
 
     // Відкриваємо WhatsApp
     window.open(url, "_blank").focus();
@@ -140,11 +141,12 @@ export function App() {
 
   const handleNext = () => {
     if (selectedOptions[currentStep]?.length === 0) {
-      alert("Пожалуйста, выберите хотя бы один вариант, чтобы продолжить.");
+      toast.error(
+        "Пожалуйста, выберите хотя бы один вариант, чтобы продолжить."
+      );
       return;
     }
 
-    // Якщо ми на останньому кроці, перевіряємо, чи є вибір і тільки потім переходимо
     if (currentStep < questions.length) {
       setCurrentStep(currentStep + 1);
     }
@@ -164,14 +166,20 @@ export function App() {
 
   return (
     <>
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="main-page">
         <div className="main-page-content">
-          <h2 className="title">
-            <strong>
-              Элитная недвижимость в Дубае от 250000$ от агенства Prime Dubai
-              Estates с 10 летним опытом работы
-            </strong>
-          </h2>
+          <div className="main-column">
+            <img src="/logo.png" alt="" className="logo" />
+            <h2 className="underTitle">10 лет опыта работы на рынке</h2>
+            <h2 className="title">
+              <strong>
+                Элитная недвижимость в Дубае от 250000$ от агенства Prime Dubai
+                Estates
+              </strong>
+            </h2>
+          </div>
+
           <div className="button-start" onClick={() => setIsOpenQuiz(true)}>
             Начать подбор
           </div>
@@ -247,7 +255,6 @@ export function App() {
                 <button
                   className="submit-button"
                   onClick={() => {
-                    console.log("Форма отправлена:", formData);
                     sendWhatsApp(); // Викликаємо функцію для відправки на WhatsApp
                     setIsOpenQuiz(false);
                     setCurrentStep(0);
