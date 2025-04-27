@@ -118,8 +118,8 @@ export function App() {
     // Формуємо текст для WhatsApp
     const url =
       `https://wa.me/${phonenumber}?text=` +
-      `*Name:* ${name}%0a` +
-      `*Phone:* ${phone}%0a` +
+      `*Имя:* ${name}%0a` +
+      `*Номер Телефона:* ${phone}%0a` +
       `${quizResponses}` + // Додаємо вибрані відповіді з квізу
       `%0a`
 
