@@ -1,0 +1,24 @@
+@media only screen and (max-width: 540px) {
+  .main-page-content {
+    gap: 60px !important;
+  }
+  .title {
+    font-size: 20px;
+  }
+
+  .quiz-title {
+    font-size: 22px;
+  }
+}
+
+@media only screen and (max-width: 410px) {
+  .quiz-title {
+    font-size: 18px!important;
+  }
+  .title {
+    font-size: 16px!important;
+  }
+  .button-start {
+    font-size: 14px!important;
+  }
+}
