@@ -2,6 +2,12 @@ import { useState, useEffect } from "react";
 import { toast, Toaster } from "react-hot-toast";
 
 export function App() {
+  const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+  const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+  const URI_API = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+  console.log(TELEGRAM_BOT_TOKEN);
+  console.log(TELEGRAM_CHAT_ID);
+  console.log(URI_API);
   const [isOpenQuiz, setIsOpenQuiz] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
@@ -87,46 +93,101 @@ export function App() {
     }));
   };
 
-  function sendWhatsApp() {
-    const phonenumber = "+380632672311";
-
-    // Дані з форми (тільки ім'я та телефон)
-    const name = formData.name;
-    const phone = formData.phone;
-
-    // Отримуємо вибрані варіанти з квізу
+  const sendBookingNotification = async () => {
     let quizResponses = "";
 
-    // Масив питань
     const questions = [
-      "Выберите нужный тип недвижимости",
-      "Какой район предпочитаете?",
-      "С какой целью планируете совершить покупку?",
-      "Когда планируете покупку?",
-      "В пределах какого бюджета рассматриваете покупку?",
+      "\n<b>Выберите нужный тип недвижимости</b>",
+      "\n<b>Какой район предпочитаете?</b>",
+      "\n<b>С какой целью планируете совершить покупку?</b>",
+      "\n<b>Когда планируете покупку?</b>",
+      "\n<b>В пределах какого бюджета рассматриваете покупку?</b>",
     ];
 
-    // Вибрані опції для кожного кроку квізу
     for (let i = 0; i < questions.length; i++) {
-      const selectedOptionsForStep = selectedOptions[i] || []; // Беремо вибрані опції для поточного кроку
+      const selectedOptionsForStep = selectedOptions[i] || [];
       if (selectedOptionsForStep.length > 0) {
-        quizResponses += `*${questions[i]}:* ${selectedOptionsForStep.join(
-          ", "
-        )}%0a`;
+        quizResponses += `${questions[i]}:\n${selectedOptionsForStep.join(
+          ", \n"
+        )}\n`;
       }
     }
 
-    // Формуємо текст для WhatsApp
-    const url =
-      `https://wa.me/${phonenumber}?text=` +
-      `*Имя:* ${name}%0a` +
-      `*Номер Телефона:* ${phone}%0a` +
-      `${quizResponses}` + // Додаємо вибрані відповіді з квізу
-      `%0a`;
+    const inputContents = [
+      "",
+      `👤 <b>*Ім'я:*</b> ${formData.name}`,
+      `📱 <b>*Номер телефону:*</b> ${formData.phone}`,
+      `${quizResponses}`,
+    ];
 
-    // Відкриваємо WhatsApp
-    window.open(url, "_blank").focus();
-  }
+    const message = inputContents.join("\n");
+
+    try {
+      const response = await fetch(URI_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          parse_mode: "html", // або HTML, якщо так і хочеш
+          text: message,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Telegram response error:", errorText);
+        throw new Error("Telegram API error");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Telegram notification error:", error);
+      throw new Error("Failed to send booking notification");
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await sendBookingNotification();
+
+      setSelectedOptions({
+        0: [],
+        1: [],
+        2: [],
+        3: [],
+        4: [],
+      });
+      setIsOpenQuiz(false);
+      setCurrentStep(0);
+      setFormData({ name: "", phone: "" });
+      toast.success(
+        "Заявка успешно отправлена! Мы скоро с вами свяжемся."
+      );
+    } catch (error) {
+      console.error("Booking error:", error);
+    }
+  };
+
+  // function sendWhatsApp() {
+  //   const phonenumber = "+380632672311";
+
+  //   // Дані з форми (тільки ім'я та телефон)
+  //   const name = formData.name;
+  //   const phone = formData.phone;
+
+  //   // Формуємо текст для WhatsApp
+  //   const url =
+  //     `https://wa.me/${phonenumber}?text=` +
+  //     `*Имя:* ${name}%0a` +
+  //     `*Номер Телефона:* ${phone}%0a` +
+  //     `%0a`;
+
+  //   // Відкриваємо WhatsApp
+  //   window.open(url, "_blank").focus();
+  // }
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -173,12 +234,12 @@ export function App() {
             <img src="/logo.png" alt="" className="logo" />
             <h2 className="underTitle">10 лет опыта работы на рынке</h2>
           </div>
-            <h2 className="title">
-              <strong>
-                Элитная недвижимость в Дубае от 250000$ от агенства Prime Dubai
-                Estates
-              </strong>
-            </h2>
+          <h2 className="title">
+            <strong>
+              Элитная недвижимость в Дубае от 250000$ от агенства Prime Dubai
+              Estates
+            </strong>
+          </h2>
 
           <div className="button-start" onClick={() => setIsOpenQuiz(true)}>
             Начать подбор
@@ -255,10 +316,7 @@ export function App() {
                 <button
                   className="submit-button"
                   onClick={() => {
-                    sendWhatsApp(); // Викликаємо функцію для відправки на WhatsApp
-                    setIsOpenQuiz(false);
-                    setCurrentStep(0);
-                    setFormData({ name: "", phone: "" });
+                    handleSubmit();
                   }}
                   disabled={!formData.name || !formData.phone}
                 >
