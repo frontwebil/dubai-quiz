@@ -316,6 +316,7 @@ export function App() {
                 <button
                   className="submit-button"
                   onClick={() => {
+                    window.fbq('track', 'Purchase');
                     handleSubmit();
                   }}
                   disabled={!formData.name || !formData.phone}
