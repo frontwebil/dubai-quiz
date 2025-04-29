@@ -163,6 +163,7 @@ export function App() {
       toast.success(
         "Заявка успешно отправлена! Мы скоро с вами свяжемся."
       );
+      window.location.href = "/thank.html";
     } catch (error) {
       console.error("Booking error:", error);
     }
@@ -313,7 +314,6 @@ export function App() {
                 <button
                   className="submit-button"
                   onClick={() => {
-                    window.fbq('track', 'Purchase');
                     handleSubmit();
                   }}
                   disabled={!formData.name || !formData.phone}
