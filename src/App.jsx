@@ -5,9 +5,6 @@ export function App() {
   const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
   const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
   const URI_API = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-  console.log(TELEGRAM_BOT_TOKEN);
-  console.log(TELEGRAM_CHAT_ID);
-  console.log(URI_API);
   const [isOpenQuiz, setIsOpenQuiz] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
