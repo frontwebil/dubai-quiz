@@ -23,24 +23,24 @@ export function App() {
   });
 
   const questions = [
-    {
-      name: "Нужный тип недвижимости",
-      checkbox: ["Квартира", "Вилла", "Таунхаус", "Пентхаус", "Все варианты"],
-    },
-    {
-      name: "Район",
-      checkbox: [
-        "Любой",
-        "Dubai Marina",
-        "Dubai Islands",
-        "Business Bay",
-        "Jumeirah Village Circle (JVC)",
-        "Dubai Hills",
-        "Palm Jumeirah",
-        "Downtown",
-        "Creek Harbour",
-      ],
-    },
+    // {
+    //   name: "Нужный тип недвижимости",
+    //   checkbox: ["Квартира", "Вилла", "Таунхаус", "Пентхаус", "Все варианты"],
+    // },
+    // {
+    //   name: "Район",
+    //   checkbox: [
+    //     "Любой",
+    //     "Dubai Marina",
+    //     "Dubai Islands",
+    //     "Business Bay",
+    //     "Jumeirah Village Circle (JVC)",
+    //     "Dubai Hills",
+    //     "Palm Jumeirah",
+    //     "Downtown",
+    //     "Creek Harbour",
+    //   ],
+    // },
     {
       name: "Цель покупки",
       checkbox: ["Для инвестиций", "Для безопасной жизни в комфорте", "Другое"],
@@ -54,16 +54,16 @@ export function App() {
         "В течение года, пока присматриваюсь",
       ],
     },
-    {
-      name: "Бюджет",
-      checkbox: [
-        "250 000 - 350 000$",
-        "350 000 - 550 000$",
-        "550 000 - 700 000$",
-        "700 000 - 1 300 000$",
-        "более 1 300 000$",
-      ],
-    },
+    // {
+    //   name: "Бюджет",
+    //   checkbox: [
+    //     "250 000 - 350 000$",
+    //     "350 000 - 550 000$",
+    //     "550 000 - 700 000$",
+    //     "700 000 - 1 300 000$",
+    //     "более 1 300 000$",
+    //   ],
+    // },
   ];
 
   const handleCheckboxChange = (option) => {
