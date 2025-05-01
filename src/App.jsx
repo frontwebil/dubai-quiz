@@ -187,16 +187,16 @@ export function App() {
   //   window.open(url, "_blank").focus();
   // }
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Enter" && isOpenQuiz) {
-        handleNext();
-      }
-    };
+  // useEffect(() => {
+  //   const handleKeyDown = (e) => {
+  //     if (e.key === "Enter" && isOpenQuiz) {
+  //       handleNext();
+  //     }
+  //   };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpenQuiz, currentStep]);
+  //   window.addEventListener("keydown", handleKeyDown);
+  //   return () => window.removeEventListener("keydown", handleKeyDown);
+  // }, [isOpenQuiz, currentStep]);
 
   const handleNext = () => {
     if (selectedOptions[currentStep]?.length === 0) {
