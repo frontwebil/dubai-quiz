@@ -22,7 +22,7 @@
   align-items: center;
   gap: 5px;
 }
-.logo{
+.logo {
   width: 160px;
   border-radius: 50%;
 }
@@ -33,6 +33,16 @@
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 0;
 }
+/* @keyframes fadeInUp {
+  from {
+    transform: translate(-50%, 0%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+} */
 
 .main-page-content {
   display: flex;
@@ -47,19 +57,8 @@
   transform: translate(-50%, -50%);
   z-index: 5;
   text-align: center;
-  animation: fadeInUp 1s ease-out forwards;
-  opacity: 0;
-}
-
-@keyframes fadeInUp {
-  from {
-    transform: translate(-50%, 0%);
-    opacity: 0;
-  }
-  to {
-    transform: translate(-50%, -50%);
-    opacity: 1;
-  }
+  /* animation: fadeInUp 1s ease-out forwards; */
+  /* opacity: 0; */
 }
 
 .title {
@@ -68,7 +67,7 @@
   padding: 10px;
 }
 
-.underTitle{
+.underTitle {
   color: white;
   margin-bottom: 80px;
   padding: 0 5px;
