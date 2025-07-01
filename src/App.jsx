@@ -1,74 +1,122 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
+
+const translations = {
+  ru: {
+    startButton: "Начать подбор",
+    experience: "10 лет опыта работы на рынке",
+    title:
+      "Элитная недвижимость в Дубае от 250000$ от агенства Prime Dubai Estates",
+    quiz: {
+      formTitle: "Заполните форму и получите подборку!",
+      nameLabel: "Ваше Имя *",
+      phoneLabel: "Ваш телефон *",
+      submitButton: "Получить подборку",
+      errorSelect: "Пожалуйста, выберите хотя бы один вариант, чтобы продолжить.",
+      successMessage: "Заявка успешно отправлена! Мы скоро с вами свяжемся.",
+      close: "×",
+      back: "←",
+      next: "Далее",
+      progress: (current, total) => `${current} / ${total}`,
+      phoneInvalid: "Введите корректный номер телефона для выбранной страны.",
+      nameEmpty: "Пожалуйста, введите имя.",
+      countryEmpty: "Пожалуйста, выберите страну.",
+    },
+    questions: [
+      {
+        name: "Цель покупки",
+        options: ["Для инвестиций", "Для безопасной жизни в комфорте", "Другое"],
+      },
+      {
+        name: "Когда планируете покупку?",
+        options: [
+          "В ближайшее время",
+          "До трех месяцев",
+          "В течение полугода",
+          "В течение года, пока присматриваюсь",
+        ],
+      },
+    ],
+  },
+
+  en: {
+    startButton: "Start Selection",
+    experience: "10 years of market experience",
+    title:
+      "Elite real estate in Dubai from $250,000 by Prime Dubai Estates agency",
+    quiz: {
+      formTitle: "Fill out the form and get your selection!",
+      nameLabel: "Your Name *",
+      phoneLabel: "Your Phone *",
+      submitButton: "Get Selection",
+      errorSelect: "Please select at least one option to continue.",
+      successMessage: "Request sent successfully! We will contact you soon.",
+      close: "×",
+      back: "←",
+      next: "Next",
+      progress: (current, total) => `${current} / ${total}`,
+      phoneInvalid: "Please enter a valid phone number for the selected country.",
+      nameEmpty: "Please enter your name.",
+      countryEmpty: "Please select a country.",
+    },
+    questions: [
+      {
+        name: "Purpose of purchase",
+        options: ["For investment", "For safe comfortable living", "Other"],
+      },
+      {
+        name: "When do you plan to buy?",
+        options: [
+          "In the near future",
+          "Within three months",
+          "Within six months",
+          "Within a year, still looking around",
+        ],
+      },
+    ],
+  },
+};
+
+const countries = [
+  { code: "GB", name: "United Kingdom", dial_code: "+44", minLength: 10, maxLength: 10 },
+  { code: "IN", name: "भारत", dial_code: "+91", minLength: 10, maxLength: 10 },
+  { code: "AZ", name: "Azərbaycan", dial_code: "+994", minLength: 9, maxLength: 9 },
+  { code: "UZ", name: "O‘zbekiston", dial_code: "+998", minLength: 9, maxLength: 9 },
+  { code: "KZ", name: "Қазақстан", dial_code: "+7", minLength: 10, maxLength: 10 },
+  { code: "US", name: "United States", dial_code: "+1", minLength: 10, maxLength: 10 },
+  { code: "DE", name: "Deutschland", dial_code: "+49", minLength: 10, maxLength: 11 },
+  { code: "DK", name: "Danmark", dial_code: "+45", minLength: 8, maxLength: 8 },
+  { code: "CH", name: "Schweiz", dial_code: "+41", minLength: 9, maxLength: 9 },
+  { code: "UA", name: "Україна", dial_code: "+380", minLength: 9, maxLength: 9 },
+];
+
+function isValidLocalPhone(phone, country) {
+  const digitsOnly = phone.replace(/\D/g, "");
+  return digitsOnly.length >= country.minLength && digitsOnly.length <= country.maxLength;
+}
 
 export function App() {
   const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
   const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
   const URI_API = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+  const [language, setLanguage] = useState("ru");
   const [isOpenQuiz, setIsOpenQuiz] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
-    phone: "",
-    email: "",
-    country: "",
-    message: "",
+    phone: "", // лише локальний номер без коду країни
+    countryDialCode: "",
   });
   const [selectedOptions, setSelectedOptions] = useState({
     0: [],
     1: [],
-    2: [],
-    3: [],
-    4: [],
   });
 
-  const questions = [
-    // {
-    //   name: "Нужный тип недвижимости",
-    //   checkbox: ["Квартира", "Вилла", "Таунхаус", "Пентхаус", "Все варианты"],
-    // },
-    // {
-    //   name: "Район",
-    //   checkbox: [
-    //     "Любой",
-    //     "Dubai Marina",
-    //     "Dubai Islands",
-    //     "Business Bay",
-    //     "Jumeirah Village Circle (JVC)",
-    //     "Dubai Hills",
-    //     "Palm Jumeirah",
-    //     "Downtown",
-    //     "Creek Harbour",
-    //   ],
-    // },
-    {
-      name: "Цель покупки",
-      checkbox: ["Для инвестиций", "Для безопасной жизни в комфорте", "Другое"],
-    },
-    {
-      name: "Когда планируете покупку?",
-      checkbox: [
-        "В ближайшее время",
-        "До трех месяцев",
-        "В течение полугода",
-        "В течение года, пока присматриваюсь",
-      ],
-    },
-    // {
-    //   name: "Бюджет",
-    //   checkbox: [
-    //     "250 000 - 350 000$",
-    //     "350 000 - 550 000$",
-    //     "550 000 - 700 000$",
-    //     "700 000 - 1 300 000$",
-    //     "более 1 300 000$",
-    //   ],
-    // },
-  ];
+  const questions = translations[language].questions;
 
   const handleCheckboxChange = (option) => {
     const currentSelections = selectedOptions[currentStep] || [];
-
     if (currentSelections.includes(option)) {
       setSelectedOptions({
         ...selectedOptions,
@@ -90,27 +138,42 @@ export function App() {
     }));
   };
 
+  const handleCountryChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      countryDialCode: e.target.value,
+    }));
+  };
+
   const sendBookingNotification = async () => {
     let quizResponses = "";
 
-    const questions = [
-      "\n<b>С какой целью планируете совершить покупку?</b>",
-      "\n<b>Когда планируете покупку?</b>",
-    ];
+    const questionTitles =
+      language === "ru"
+        ? [
+            "\n<b>С какой целью планируете совершить покупку?</b>",
+            "\n<b>Когда планируете покупку?</b>",
+          ]
+        : [
+            "\n<b>Purpose of purchase</b>",
+            "\n<b>When do you plan to buy?</b>",
+          ];
 
-    for (let i = 0; i < questions.length; i++) {
+    for (let i = 0; i < questionTitles.length; i++) {
       const selectedOptionsForStep = selectedOptions[i] || [];
       if (selectedOptionsForStep.length > 0) {
-        quizResponses += `${questions[i]}:\n${selectedOptionsForStep.join(
+        quizResponses += `${questionTitles[i]}:\n${selectedOptionsForStep.join(
           ", \n"
         )}\n`;
       }
     }
 
+    const fullPhone = formData.countryDialCode + formData.phone.replace(/\D/g, "");
+
     const inputContents = [
       "",
-      `👤 <b>*Ім'я:*</b> ${formData.name}`,
-      `📱 <b>*Номер телефону:*</b> ${formData.phone}`,
+      `👤 <b>*${language === "ru" ? "Имя" : "Name"}:*</b> ${formData.name}`,
+      `📱 <b>*${language === "ru" ? "Номер телефона" : "Phone number"}:*</b> ${fullPhone}`,
       `${quizResponses}`,
     ];
 
@@ -124,7 +187,7 @@ export function App() {
         },
         body: JSON.stringify({
           chat_id: TELEGRAM_CHAT_ID,
-          parse_mode: "html", // або HTML, якщо так і хочеш
+          parse_mode: "html",
           text: message,
         }),
       });
@@ -144,62 +207,45 @@ export function App() {
   };
 
   const handleSubmit = async () => {
+    if (!formData.name.trim()) {
+      toast.error(translations[language].quiz.nameEmpty);
+      return;
+    }
+
+    if (!formData.countryDialCode) {
+      toast.error(translations[language].quiz.countryEmpty);
+      return;
+    }
+
+    const country = countries.find((c) => c.dial_code === formData.countryDialCode);
+    if (!country) {
+      toast.error(translations[language].quiz.countryEmpty);
+      return;
+    }
+
+    if (!isValidLocalPhone(formData.phone, country)) {
+      toast.error(translations[language].quiz.phoneInvalid);
+      return;
+    }
+
     try {
       await sendBookingNotification();
 
-      setSelectedOptions({
-        0: [],
-        1: [],
-        2: [],
-        3: [],
-        4: [],
-      });
+      setSelectedOptions({ 0: [], 1: [] });
       setIsOpenQuiz(false);
       setCurrentStep(0);
-      setFormData({ name: "", phone: "" });
-      toast.success(
-        "Заявка успешно отправлена! Мы скоро с вами свяжемся."
-      );
+      setFormData({ name: "", phone: "", countryDialCode: "" });
+      toast.success(translations[language].quiz.successMessage);
       window.location.href = "/thank.html";
     } catch (error) {
       console.error("Booking error:", error);
+      toast.error("Error sending request.");
     }
   };
 
-  // function sendWhatsApp() {
-  //   const phonenumber = "+380632672311";
-
-  //   // Дані з форми (тільки ім'я та телефон)
-  //   const name = formData.name;
-  //   const phone = formData.phone;
-
-  //   // Формуємо текст для WhatsApp
-  //   const url =
-  //     `https://wa.me/${phonenumber}?text=` +
-  //     `*Имя:* ${name}%0a` +
-  //     `*Номер Телефона:* ${phone}%0a` +
-  //     `%0a`;
-
-  //   // Відкриваємо WhatsApp
-  //   window.open(url, "_blank").focus();
-  // }
-
-  // useEffect(() => {
-  //   const handleKeyDown = (e) => {
-  //     if (e.key === "Enter" && isOpenQuiz) {
-  //       handleNext();
-  //     }
-  //   };
-
-  //   window.addEventListener("keydown", handleKeyDown);
-  //   return () => window.removeEventListener("keydown", handleKeyDown);
-  // }, [isOpenQuiz, currentStep]);
-
   const handleNext = () => {
     if (selectedOptions[currentStep]?.length === 0) {
-      toast.error(
-        "Пожалуйста, выберите хотя бы один вариант, чтобы продолжить."
-      );
+      toast.error(translations[language].quiz.errorSelect);
       return;
     }
 
@@ -220,24 +266,41 @@ export function App() {
     setIsOpenQuiz(false);
   };
 
+  const isSubmitDisabled =
+    !formData.name.trim() ||
+    !formData.countryDialCode ||
+    !isValidLocalPhone(formData.phone, countries.find(c => c.dial_code === formData.countryDialCode));
+
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
+      <div className="language-switcher">
+        <button
+          onClick={() => setLanguage("ru")}
+          className={language === "ru" ? "lang-btn active" : "lang-btn"}
+        >
+          Рус
+        </button>
+        <button
+          onClick={() => setLanguage("en")}
+          className={language === "en" ? "lang-btn active" : "lang-btn"}
+        >
+          Eng
+        </button>
+      </div>
+
       <div className="main-page">
         <div className="main-page-content">
           <div className="main-column">
             <img src="/logo.png" alt="" className="logo" />
-            <h2 className="underTitle">10 лет опыта работы на рынке</h2>
+            <h2 className="underTitle">{translations[language].experience}</h2>
           </div>
           <h2 className="title">
-            <strong>
-              Элитная недвижимость в Дубае от 250000$ от агенства Prime Dubai
-              Estates
-            </strong>
+            <strong>{translations[language].title}</strong>
           </h2>
 
           <div className="button-start" onClick={() => setIsOpenQuiz(true)}>
-            Начать подбор
+            {translations[language].startButton}
           </div>
         </div>
       </div>
@@ -252,25 +315,23 @@ export function App() {
               }}
             >
               <div className="progress-indicator">
-                {currentStep + 1} / {questions.length + 1}
+                {translations[language].quiz.progress(currentStep + 1, questions.length + 1)}
               </div>
             </div>
           </div>
 
           <button className="close-button" onClick={handleClose}>
-            ×
+            {translations[language].quiz.close}
           </button>
         </div>
 
         <div className="quiz-container">
           {currentStep < questions.length ? (
             <>
-              <h2 className="quiz-title animate-text">
-                {questions[currentStep].name}
-              </h2>
+              <h2 className="quiz-title animate-text">{questions[currentStep].name}</h2>
 
               <div className="quiz-options">
-                {questions[currentStep].checkbox.map((option, index) => (
+                {questions[currentStep].options.map((option, index) => (
                   <label key={index} className="quiz-option">
                     <input
                       type="checkbox"
@@ -284,11 +345,9 @@ export function App() {
             </>
           ) : (
             <>
-              <h2 className="quiz-title animate-text">
-                Заполните форму и получите подборку!
-              </h2>
+              <h2 className="quiz-title animate-text">{translations[language].quiz.formTitle}</h2>
               <div className="quiz-form">
-                <label htmlFor="name">Ваше Имя *</label>
+                <label htmlFor="name">{translations[language].quiz.nameLabel}</label>
                 <input
                   type="text"
                   name="name"
@@ -298,24 +357,48 @@ export function App() {
                   required
                 />
 
-                <label htmlFor="phone">Ваш телефон *</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="quiz-input"
-                  required
-                />
+                <label htmlFor="phone">{translations[language].quiz.phoneLabel}</label>
+                <div className="form-flex-input" style={{ display: "flex", gap: "10px" }}>
+                  <select
+                    name="countryDialCode"
+                    value={formData.countryDialCode}
+                    onChange={handleCountryChange}
+                    required
+                    style={{
+                      padding: "8px",
+                      fontSize: "13px",
+                      borderRadius: "6px",
+                      border: "1px solid #ccc",
+                    }}
+                  >
+                    <option value="" disabled>
+                      {language === "ru" ? "Страна" : "Country"}
+                    </option>
+                    {countries.map(({ code, name, dial_code }) => (
+                      <option key={code} value={dial_code}>
+                        {code} ({dial_code})
+                      </option>
+                    ))}
+                  </select>
+
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="quiz-input"
+                    placeholder={language === "ru" ? "Номер телефона" : "Phone number"}
+                    required
+                    style={{ flexGrow: 1 }}
+                  />
+                </div>
 
                 <button
                   className="submit-button"
-                  onClick={() => {
-                    handleSubmit();
-                  }}
-                  disabled={!formData.name || !formData.phone}
+                  onClick={handleSubmit}
+                  disabled={isSubmitDisabled}
                 >
-                  Получить подборку
+                  {translations[language].quiz.submitButton}
                 </button>
               </div>
             </>
@@ -325,10 +408,10 @@ export function App() {
         <div className="quiz-footer">
           <div className="quiz-navigation">
             <button onClick={handleBack} className="back-button">
-              ←
+              {translations[language].quiz.back}
             </button>
             <button onClick={handleNext} className="next-button">
-              Далее
+              {translations[language].quiz.next}
             </button>
           </div>
         </div>
