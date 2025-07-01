@@ -100,7 +100,7 @@ export function App() {
   const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
   const URI_API = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
-  const [language, setLanguage] = useState("ru");
+  const [language, setLanguage] = useState("en");
   const [isOpenQuiz, setIsOpenQuiz] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
