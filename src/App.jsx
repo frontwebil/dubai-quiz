@@ -8,11 +8,13 @@ const translations = {
     title:
       "Элитная недвижимость в Дубае от 250000$ от агенства Prime Dubai Estates",
     quiz: {
-      formTitle: "Заполните форму и получите подборку!",
+      formTitle: "Заполните форму и с вами свяжеться эксперт по недвижимости для подбора конкретных объектов!",
+      formSubTitle: "Это форма для тех , кто реально расматривает покупку",
       nameLabel: "Ваше Имя *",
       phoneLabel: "Ваш телефон *",
       submitButton: "Получить подборку",
-      errorSelect: "Пожалуйста, выберите хотя бы один вариант, чтобы продолжить.",
+      errorSelect:
+        "Пожалуйста, выберите хотя бы один вариант, чтобы продолжить.",
       successMessage: "Заявка успешно отправлена! Мы скоро с вами свяжемся.",
       close: "×",
       back: "←",
@@ -25,7 +27,11 @@ const translations = {
     questions: [
       {
         name: "Цель покупки",
-        options: ["Для инвестиций", "Для безопасной жизни в комфорте", "Другое"],
+        options: [
+          "Для инвестиций",
+          "Для безопасной жизни в комфорте",
+          "Другое",
+        ],
       },
       {
         name: "Когда планируете покупку?",
@@ -34,6 +40,30 @@ const translations = {
           "До трех месяцев",
           "В течение полугода",
           "В течение года, пока присматриваюсь",
+        ],
+      },
+      {
+        name: "Район",
+        checkbox: [
+          "Любой",
+          "Dubai Marina",
+          "Dubai Islands",
+          "Business Bay",
+          "Jumeirah Village Circle (JVC)",
+          "Dubai Hills",
+          "Palm Jumeirah",
+          "Downtown",
+          "Creek Harbour",
+        ],
+      },
+      {
+        name: "Бюджет",
+        checkbox: [
+          "250 000 - 350 000$",
+          "350 000 - 550 000$",
+          "550 000 - 700 000$",
+          "700 000 - 1 300 000$",
+          "более 1 300 000$",
         ],
       },
     ],
@@ -45,7 +75,8 @@ const translations = {
     title:
       "Elite real estate in Dubai from $250,000 by Prime Dubai Estates agency",
     quiz: {
-      formTitle: "Fill out the form and get your selection!",
+      formTitle: "Fill out the form and a real estate expert will contact you to select specific properties!",
+      formSubTitle: "This form is for those who are really considering a purchase",
       nameLabel: "Your Name *",
       phoneLabel: "Your Phone *",
       submitButton: "Get Selection",
@@ -55,7 +86,8 @@ const translations = {
       back: "←",
       next: "Next",
       progress: (current, total) => `${current} / ${total}`,
-      phoneInvalid: "Please enter a valid phone number for the selected country.",
+      phoneInvalid:
+        "Please enter a valid phone number for the selected country.",
       nameEmpty: "Please enter your name.",
       countryEmpty: "Please select a country.",
     },
@@ -73,26 +105,95 @@ const translations = {
           "Within a year, still looking around",
         ],
       },
+      {
+        name: "Area",
+        checkbox: [
+          "Any",
+          "Dubai Marina",
+          "Dubai Islands",
+          "Business Bay",
+          "Jumeirah Village Circle (JVC)",
+          "Dubai Hills",
+          "Palm Jumeirah",
+          "Downtown",
+          "Creek Harbour",
+        ],
+      },
+      {
+        name: "Budget",
+        checkbox: [
+          "250 000 - 350 000$",
+          "350 000 - 550 000$",
+          "550 000 - 700 000$",
+          "700 000 - 1 300 000$",
+          "more than 1 300 000$",
+        ],
+      },
     ],
   },
 };
 
 const countries = [
-  { code: "GB", name: "United Kingdom", dial_code: "+44", minLength: 10, maxLength: 10 },
+  {
+    code: "GB",
+    name: "United Kingdom",
+    dial_code: "+44",
+    minLength: 10,
+    maxLength: 10,
+  },
   { code: "IN", name: "भारत", dial_code: "+91", minLength: 10, maxLength: 10 },
-  { code: "AZ", name: "Azərbaycan", dial_code: "+994", minLength: 9, maxLength: 9 },
-  { code: "UZ", name: "O‘zbekiston", dial_code: "+998", minLength: 9, maxLength: 9 },
-  { code: "KZ", name: "Қазақстан", dial_code: "+7", minLength: 10, maxLength: 10 },
-  { code: "US", name: "United States", dial_code: "+1", minLength: 10, maxLength: 10 },
-  { code: "DE", name: "Deutschland", dial_code: "+49", minLength: 10, maxLength: 11 },
+  {
+    code: "AZ",
+    name: "Azərbaycan",
+    dial_code: "+994",
+    minLength: 9,
+    maxLength: 9,
+  },
+  {
+    code: "UZ",
+    name: "O'zbekiston",
+    dial_code: "+998",
+    minLength: 9,
+    maxLength: 9,
+  },
+  {
+    code: "KZ",
+    name: "Қазақстан",
+    dial_code: "+7",
+    minLength: 10,
+    maxLength: 10,
+  },
+  {
+    code: "US",
+    name: "United States",
+    dial_code: "+1",
+    minLength: 10,
+    maxLength: 10,
+  },
+  {
+    code: "DE",
+    name: "Deutschland",
+    dial_code: "+49",
+    minLength: 10,
+    maxLength: 11,
+  },
   { code: "DK", name: "Danmark", dial_code: "+45", minLength: 8, maxLength: 8 },
   { code: "CH", name: "Schweiz", dial_code: "+41", minLength: 9, maxLength: 9 },
-  { code: "UA", name: "Україна", dial_code: "+380", minLength: 9, maxLength: 9 },
+  {
+    code: "UA",
+    name: "Україна",
+    dial_code: "+380",
+    minLength: 9,
+    maxLength: 9,
+  },
 ];
 
 function isValidLocalPhone(phone, country) {
   const digitsOnly = phone.replace(/\D/g, "");
-  return digitsOnly.length >= country.minLength && digitsOnly.length <= country.maxLength;
+  return (
+    digitsOnly.length >= country.minLength &&
+    digitsOnly.length <= country.maxLength
+  );
 }
 
 export function App() {
@@ -108,9 +209,12 @@ export function App() {
     phone: "", // лише локальний номер без коду країни
     countryDialCode: "",
   });
+
   const [selectedOptions, setSelectedOptions] = useState({
     0: [],
     1: [],
+    2: [],
+    3: [],
   });
 
   const questions = translations[language].questions;
@@ -148,32 +252,27 @@ export function App() {
   const sendBookingNotification = async () => {
     let quizResponses = "";
 
-    const questionTitles =
-      language === "ru"
-        ? [
-            "\n<b>С какой целью планируете совершить покупку?</b>",
-            "\n<b>Когда планируете покупку?</b>",
-          ]
-        : [
-            "\n<b>Purpose of purchase</b>",
-            "\n<b>When do you plan to buy?</b>",
-          ];
+    const questionsList = translations[language].questions;
 
-    for (let i = 0; i < questionTitles.length; i++) {
-      const selectedOptionsForStep = selectedOptions[i] || [];
-      if (selectedOptionsForStep.length > 0) {
-        quizResponses += `${questionTitles[i]}:\n${selectedOptionsForStep.join(
-          ", \n"
+    for (let i = 0; i < questionsList.length; i++) {
+      const question = questionsList[i];
+      const selected = selectedOptions[i] || [];
+      if (selected.length > 0) {
+        quizResponses += `\n<b>${question.name}</b>:\n${selected.join(
+          ",\n"
         )}\n`;
       }
     }
 
-    const fullPhone = formData.countryDialCode + formData.phone.replace(/\D/g, "");
+    const fullPhone =
+      formData.countryDialCode + formData.phone.replace(/\D/g, "");
 
     const inputContents = [
       "",
       `👤 <b>*${language === "ru" ? "Имя" : "Name"}:*</b> ${formData.name}`,
-      `📱 <b>*${language === "ru" ? "Номер телефона" : "Phone number"}:*</b> ${fullPhone}`,
+      `📱 <b>*${
+        language === "ru" ? "Номер телефона" : "Phone number"
+      }:*</b> ${fullPhone}`,
       `${quizResponses}`,
     ];
 
@@ -217,7 +316,9 @@ export function App() {
       return;
     }
 
-    const country = countries.find((c) => c.dial_code === formData.countryDialCode);
+    const country = countries.find(
+      (c) => c.dial_code === formData.countryDialCode
+    );
     if (!country) {
       toast.error(translations[language].quiz.countryEmpty);
       return;
@@ -231,7 +332,8 @@ export function App() {
     try {
       await sendBookingNotification();
 
-      setSelectedOptions({ 0: [], 1: [] });
+      // ВИПРАВЛЕННЯ: Очищення всіх 4 питань
+      setSelectedOptions({ 0: [], 1: [], 2: [], 3: [] });
       setIsOpenQuiz(false);
       setCurrentStep(0);
       setFormData({ name: "", phone: "", countryDialCode: "" });
@@ -269,7 +371,10 @@ export function App() {
   const isSubmitDisabled =
     !formData.name.trim() ||
     !formData.countryDialCode ||
-    !isValidLocalPhone(formData.phone, countries.find(c => c.dial_code === formData.countryDialCode));
+    !isValidLocalPhone(
+      formData.phone,
+      countries.find((c) => c.dial_code === formData.countryDialCode)
+    );
 
   return (
     <>
@@ -315,7 +420,10 @@ export function App() {
               }}
             >
               <div className="progress-indicator">
-                {translations[language].quiz.progress(currentStep + 1, questions.length + 1)}
+                {translations[language].quiz.progress(
+                  currentStep + 1,
+                  questions.length + 1
+                )}
               </div>
             </div>
           </div>
@@ -328,10 +436,16 @@ export function App() {
         <div className="quiz-container">
           {currentStep < questions.length ? (
             <>
-              <h2 className="quiz-title animate-text">{questions[currentStep].name}</h2>
+              <h2 className="quiz-title animate-text">
+                {questions[currentStep].name}
+              </h2>
 
               <div className="quiz-options">
-                {questions[currentStep].options.map((option, index) => (
+                {(
+                  questions[currentStep].options ||
+                  questions[currentStep].checkbox ||
+                  []
+                ).map((option, index) => (
                   <label key={index} className="quiz-option">
                     <input
                       type="checkbox"
@@ -345,9 +459,16 @@ export function App() {
             </>
           ) : (
             <>
-              <h2 className="quiz-title animate-text">{translations[language].quiz.formTitle}</h2>
+              <h2 className="quiz-title animate-text">
+                {translations[language].quiz.formTitle}
+              </h2>
+              <h3 className="quiz-subTitle">
+                {translations[language].quiz.formSubTitle}
+              </h3>
               <div className="quiz-form">
-                <label htmlFor="name">{translations[language].quiz.nameLabel}</label>
+                <label htmlFor="name">
+                  {translations[language].quiz.nameLabel}
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -357,8 +478,13 @@ export function App() {
                   required
                 />
 
-                <label htmlFor="phone">{translations[language].quiz.phoneLabel}</label>
-                <div className="form-flex-input" style={{ display: "flex", gap: "10px" }}>
+                <label htmlFor="phone">
+                  {translations[language].quiz.phoneLabel}
+                </label>
+                <div
+                  className="form-flex-input"
+                  style={{ display: "flex", gap: "10px" }}
+                >
                   <select
                     name="countryDialCode"
                     value={formData.countryDialCode}
@@ -387,7 +513,9 @@ export function App() {
                     value={formData.phone}
                     onChange={handleInputChange}
                     className="quiz-input"
-                    placeholder={language === "ru" ? "Номер телефона" : "Phone number"}
+                    placeholder={
+                      language === "ru" ? "Номер телефона" : "Phone number"
+                    }
                     required
                     style={{ flexGrow: 1 }}
                   />

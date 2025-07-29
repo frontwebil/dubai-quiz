@@ -1,17 +1,20 @@
 @media only screen and (max-width: 540px) {
-  .logo{
-    width: 100px!important;
+  .logo {
+    width: 100px !important;
     border-radius: 50%;
   }
   .main-page-content {
     gap: 40px !important;
   }
   .title {
-    font-size: 24px!important;
+    font-size: 24px !important;
   }
 
   .quiz-title {
     font-size: 22px;
+  }
+  .quiz-subTitle {
+    font-size: 16px;
   }
 }
 
@@ -20,9 +23,12 @@
     gap: 30px !important;
   }
   .quiz-title {
-    font-size: 18px!important;
+    font-size: 18px !important;
+  }
+  .quiz-subTitle {
+    font-size: 14px !important;
   }
   .button-start {
-    font-size: 14px!important;
+    font-size: 14px !important;
   }
 }
